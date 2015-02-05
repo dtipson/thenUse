@@ -105,22 +105,23 @@ Or even do lots of stuff all mashed up:
 
 ```
 var red = use('toggleClass','red'),
-    redthenFadeThen = $('header')
+    redtheHeaderthenFadeitThenUnred = $('header')
         .use(red)
         .thenUse('delay',2000)
         .thenUse('fadeTo',3000, 0.4, red.$ );
 
-//and now redthenFadeThen is a function that does all that
+//and now redtheHeaderthenFadeitThenUnred is a function that does all that to the header
+redtheHeaderthenFadeitThenUnred();
 ```
 
 Or expressed/used in a slightly different way...
 
 ```
 var red = use('toggleClass','red'),
-    redthenFadeThen = red.thenUse('delay',2000)
+    redthenFadeThenUnred = red.thenUse('delay',2000)
         .thenUse('fadeTo',3000, 0.4, red.$ );
 
-$('header').use(redthenFadeThen)();//extra parentheses to actually run the function now
+$('header').use(redthenFadeThenUnred)();//extra parentheses to actually run the function now
 
 ```
 
