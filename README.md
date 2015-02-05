@@ -3,7 +3,7 @@
 Define methods, compose chains of methods and partially apply their arguments, and apply a context later on, giving you a function that's perfect and succinct for use as a callback.
 
 
-So, I create a lot of callback functions. A lot of them are just anonymous wrappers around other functions, which seems really busy and really silly.
+So, I create a lot of callback functions. A lot of them are just anonymous wrappers around other functions, which seems really busy and really silly sometimes.
 
 ```
 someApi().done(function(){
@@ -13,7 +13,13 @@ someApi().done(function(){
 });
 ```
 
-So I made a little libraray that can express it more like this:
+And you know, .remove() is just a function, it doesn't even take any arguments.  And .done() is a thing that fires functions you put into it. So why can't I just do something like:
+
+```
+someApi().done( $('thing').remove );
+```
+
+Well, lots of reasons, lots of really interesting reasons. So I made a little jQuery plugin/library that gets as close as I could get to that:
 
 ```
 someApi().done(
@@ -23,7 +29,7 @@ someApi().done(
 );
 ```
 
-Or maybe like this, depending on what context makes sense:
+Or you know, maybe like this, depending on what context makes sense:
 
 ```
 var remove = use('remove');
@@ -41,7 +47,7 @@ So, that can be nice sometimes. A bit easier to read, minifies a tiny bit better
 $('ul').on('click','li', function(){ $(this).remove(); });
 ```
 
-Another anonymous function. And why am I explicitly specifying $(this) for something so simple? What's with all the () () ()? So, now I can do this instead:
+Another anonymous function. And why am I explicitly specifying $(this) for something so simple? What's with all the () () ()? It looks like a really lousy emjoi. So, now I can do this instead:
 
 ```
 $('ul').on('click','li', use('remove').$ );
