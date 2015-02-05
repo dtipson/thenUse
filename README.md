@@ -91,7 +91,7 @@ someApi('that-returns-a-string').done( toggleClass.on($thing) );
 someApi('that-returns-a-string').done( $thing.use(toggleClass) );//same
 ```
 
-Right?  We already have some api that returns a string argument, we already have a function that takes a string argument, so why do we need to re-say all that stuff?  Just hook them together.  Tell it what to do it do.
+Right?  We already have some api that returns a string argument, we already have a function that takes a string argument, so why do we need to re-say all that stuff?  Just hook them together.  Tell it what to do to what.
 
 Also, what if we want to define the usage of a bunch of chained jQuery methods? Ok.
 
