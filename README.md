@@ -110,7 +110,8 @@ var red = use('toggleClass','red'),
         .thenUse('delay',2000)
         .thenUse('fadeTo',3000, 0.4, red.$ );
 
-//and now redtheHeaderthenFadeitThenUnred is a function that does all that to the header
+//now redtheHeaderthenFadeitThenUnred is a function that does all that to the header
+
 redtheHeaderthenFadeitThenUnred();
 ```
 
@@ -121,7 +122,7 @@ var red = use('toggleClass','red'),
     redthenFadeThenUnred = red.thenUse('delay',2000)
         .thenUse('fadeTo',3000, 0.4, red.$ );
 
-$('header').use(redthenFadeThenUnred)();//extra parentheses to actually run the function now
+$('header').use(redthenFadeThenUnred)();//extra parentheses = actually run the function now
 
 ```
 
