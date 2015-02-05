@@ -3,50 +3,110 @@
 Define methods, compose chains of methods and partially apply their arguments, and apply a context later on, giving you a function that's perfect and succinct for use as a callback.
 
 
-So, I create a lot of callbacks. And I'm sort of sick of anonymous functions.
+So, I create a lot of callback functions. A lot of them are just anonymous wrappers around other functions, which seems really busy and really silly.
 
+```
+someApi().done(function(){
+    $thing.remove();
+}).fail(function(){
+    $otherThing.addClass('failed');
+});
+```
 
-    someApi().done(function(){
-        $thing.remove();
-    }).fail(function(){
-        $otherThing.addClass('failed');
-    });
+So I made a little libraray that can express it more like this:
 
-So I made a thing that turns it into this:
+```
+someApi().done(
+    $thing.use('remove')
+).fail(
+    $otherThing.use('addClass','failed')
+);
+```
 
-    someApi().done(
-        $thing.use('remove')
-    ).fail(
-        $otherThing.use('addClass','failed')
-    );
+Or maybe like this, depending on what context makes sense:
 
-So, that can be nice. a bit easier to read, minifies a tiny bit better, whatever.  Same thing with this:
+```
+var remove = use('remove');
 
+someApi().done(
+    remove.the($thing)
+).fail(
+    remove.the($otherThing)
+);
+```
+
+So, that can be nice sometimes. A bit easier to read, minifies a tiny bit better, whatever.  Same thing with this:
+
+```
 $('ul').on('click','li', function(){ $(this).remove(); });
+```
 
-Another anonymous function. And why am I explicitly specifying $(this) for something this simple? What's with all the () () ()? I'm only trying to do one simple thing here.  So, now I can do this instead:
+Another anonymous function. And why am I explicitly specifying $(this) for something so simple? What's with all the () () ()? So, now I can do this instead:
 
+```
 $('ul').on('click','li', use('remove').$ );
+```
 
-Mildly interesting.
+or
 
-But what if we could partially apply method arguments, but decide to take others at runtime.
+```
+var removeSelf = use('remove').$;
 
+$('ul').on('click','li', removeSelf );
+```
 
+Mildly interesting.  Instead of doing something, use is returning a function, or at least something that can become a function once it has a calling context.
 
+But what if we could partially apply some method arguments, but decide to take others at runtime?
+
+```
 var toggleClass = use('toggleClass').take(1);
+```
 
-toggleClass... what? Well can decide that later
+toggleClass... what? Well can decide that later:
 
+```
 $('ul').on('click','li', toggleClass('foo').$ );
 $('ol').on('click','li', toggleClass('bar').$ );
 $('td').on('click','li', toggleClass('baz').$ );
 
+toggleClass('zim').on($('body'));
+
+```
+
 Or say we have a dfd chain that returns a string, now we can use that function to decide what to apply it to:
 
-someApi('that returns a string class').done( toggleClass.on($thing) );
+```
+var $thing = $('.thing');
 
+someApi('that-returns-a-string').done( toggleClass.on($thing) );
+someApi('that-returns-a-string').done( $thing.use(toggleClass) );//same
+```
 
+Right?  We already have some api that returns a string argument, we already have a function that takes a string argument, so why do we need to re-say all that stuff?  Just hook them together.  Tell it what to do it do.
 
+Also, what if we want to define the usage of a bunch of chained jQuery methods? Ok.
 
+```
+var toggleClosest = use('closest').take(1).thenUse('toggleClass').take(1);
+
+$('td').on('click','li', toggleClosest('table','baz').$ );
+```
+
+Or even do lots of stuff all mashed up:
+
+```
+var red = use('toggleClass','red'),
+    redthenFadeThen = $('header')
+        .use(red)
+        .thenUse('delay',2000)
+        .thenUse('fadeTo',3000, 0.4, red.$ );
+
+//and now redthenFadeThen is a function that does all that
+
+```
+
+I mean, you could just define functions for all of this stuff too, though they won't be as "composable."  It's nice sometimes to just define some behavior that you want TO have happen, rather than having it happen right away.
+
+IDK, you do what you want.
 
