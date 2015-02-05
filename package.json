@@ -1,0 +1,26 @@
+{
+  "name": "thenUse",
+  "version": "0.2.0",
+  "description": "",
+  "main": "thenUse.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtipson/thenUse.git"
+  },
+  "author": "Drew Tipson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dtipson/thenUse/issues"
+  },
+  "homepage": "https://github.com/dtipson/thenUse",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "uglify": "^0.1.1",
+    "gulp-uglify": "^1.1.0",
+    "gulp-jshint": "^1.9.2",
+    "gulp-livereload": "^3.7.0"
+  }
+}
