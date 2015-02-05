@@ -1,6 +1,6 @@
 # thenUse
 
-Define methods, compose chains of methods and partially apply their arguments, and apply a context later on, giving you a function that's perfect and succinct for use as a callback.
+Define methods, or chains of methods, partially apply some of their arguments, apply a context later on, get back a function that will do what you wanted later rather than doing it now.  Perfect one-line simple callbacks or compose complex chains.
 
 
 So, I create a lot of callback functions. A lot of them are just anonymous wrappers around other functions, which seems really busy and really silly sometimes.
