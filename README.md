@@ -93,7 +93,7 @@ someApi('that-returns-a-string').done( $thing.use(toggleClass) );//same
 
 Right?  We already have some api that returns a string argument, we already have a function that takes a string argument, so why do we need to re-say all that stuff?  Just hook them together.  Tell it what to do to what.
 
-Also, what if we want to define the usage of a bunch of chained jQuery methods? Ok.
+Also, what if we want to define the usage of a bunch of chained jQuery methods and maybe even define which arguments get passed into them later on? Ok.
 
 ```
 var toggleClosest = use('closest').take(1).thenUse('toggleClass').take(1);
