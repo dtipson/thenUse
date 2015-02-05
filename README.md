@@ -2,6 +2,27 @@
 
 Define methods, or chains of methods, partially apply some of their arguments, apply a context later on, get back a function that will do what you wanted later rather than doing it now.  Perfect one-line simple callbacks or compose complex chains.
 
+---
+
+use(method /* args... any number of method args*/) -> returns an object with methods
+
+.on(context)/.the(context) -> specify context (a jQuery collection) and return the function
+
+.thenUse(method /* args...*/) -> chain on another method (same args as use, same result)
+
+.$ -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), apply it to the method chain, AND run it
+
+.take(integer) -> after each use, .take specifies how many extra arguments the final function can accept, applying them in order
+
+---
+
+You can also do things the other way around:
+
+$().use -> a jQuery plugin that binds the "used" methods to the jQuery collection and then returns the resulting function
+
+-----
+
+##Why Did You Do This
 
 So, I create a lot of callback functions. A lot of them are just anonymous wrappers around other functions, which seems really busy and really silly sometimes.
 
