@@ -63,6 +63,8 @@ $('ul').on('click','li', removeSelf );
 
 Mildly interesting.  Instead of doing something, use is returning a function, or at least something that can become a function once it has a calling context.
 
+When used with jQuery, it's basically like, backwards.  You can define the methods before you decide what apply it to. use('fadeOut').on($('body')) Well, sometimes. You can also do $('body').use('remove').  The real difference is just that in these cases, instead of doing something, it's returning a function that _WILL_ do it when it's called.
+
 But what if we could partially apply some method arguments, but decide to take others at runtime?
 
 ```
