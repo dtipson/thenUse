@@ -111,6 +111,16 @@ var red = use('toggleClass','red'),
         .thenUse('fadeTo',3000, 0.4, red.$ );
 
 //and now redthenFadeThen is a function that does all that
+```
+
+Or expressed/used in a slightly different way...
+
+```
+var red = use('toggleClass','red'),
+    redthenFadeThen = red.thenUse('delay',2000)
+        .thenUse('fadeTo',3000, 0.4, red.$ );
+
+$('header').use(redthenFadeThen)();//extra parentheses to actually run the function now
 
 ```
 
