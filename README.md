@@ -46,8 +46,8 @@ You can also do things the other way around:
 **$().use(method /*args...*/)** -> a jQuery plugin that binds the "used" methods to the jQuery collection and then returns the resulting function
 
 ```
-$('body').use('css',{opacity:0.3});
-$('body').use(dim);//also accepts an already defined stack of methods
+$('body').use('css',{opacity:0.3}); //returns a function that does this
+$('body').use(dim);// also accepts an already defined stack of methods
 ```
 
 
