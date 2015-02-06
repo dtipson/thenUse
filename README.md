@@ -4,15 +4,42 @@ Define methods, or chains of methods, partially apply some of their arguments, a
 
 ---
 
-**use(method /* args...*/)** -> returns an object with the following methods:
+**use(method /* args...*/)** -> stores the method/arguments, exposes ways to turn them into functions
 
-**.on(context)/.the(context)** -> specify context (say, a jQuery collection) and return the function
+```
+var dim = use('css',{opacity:0.3});
 
-**.thenUse(method /* args...*/)** -> chain on another method (same args as use, same result)
+//"dim" represents the method/arguments, now exposes has the following methods:
+```
+
+
+**.on(context)/.the(context)** -> specify a context (say, a jQuery collection) and return a function that will use the stored methods on it
+
+```
+var dimTheBody = use('css',{opacity:0.3}).on($('body'));
+var dimTheBody = dim.the($('body'));// alternate syntax, same result
+
+```
+
+**.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result)
+
+```
+var dimThenSlim = dim.thenUse('delay',5000).thenUse('slideUp');
+```
 
 **.$** -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), apply it to the method chain, AND run it
 
+```
+$('ul').on('click','li', dim.$ );
+```
+
 **.take(integer)** -> after each use, .take specifies how many extra arguments the final function can accept, applying them in order
+
+```
+var toggleClass = use('toggleClass').take(2);
+
+$('ul').on('click','li', toggleClass('clicked',true).$ );
+```
 
 ---
 
