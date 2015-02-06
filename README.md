@@ -9,16 +9,15 @@ Define methods, or chains of methods, partially apply some of their arguments, a
 ```
 var dim = use('css',{opacity:0.3});
 
-//"dim" represents the method/arguments, now exposes has the following methods:
+//"dim" represents the method/arguments and exposes has the following methods:
 ```
 
 
-**.on(context)/.the(context)** -> specify a context (say, a jQuery collection) and return a function that will use the stored methods on it
+**.on(context)/.the(context)** -> specify a context (say, a jQuery collection) and return a _function_ that, when run, will use the stored methods on it
 
 ```
 var dimTheBody = use('css',{opacity:0.3}).on($('body'));
 var dimTheBody = dim.the($('body'));// alternate syntax, same result
-
 ```
 
 **.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result, but now has multiple method/arg pairs in the stack)
@@ -51,12 +50,14 @@ $('body').use(dim);// also accepts an already defined stack of methods
 ```
 
 
-Once we have something that has both methods and a context that matches those methods (i.e. the method "remove" is defined on the context $('.thing')) use() returns a function.  That function, however, also has the above methods, so you don't just have to call it, you can continue to define further functions using it
+Once we have something that has both methods and a context that matches those methods (i.e. the method "remove" is defined on the context $('.thing')) use() returns a function.
+
+**NOTE:** That function _also_ has the above methods, meaing that you can continue to define further functions by chaining on additional behavior.
 
 
 -----
 
-##Why Did You Do This
+##Why Did You Do This?
 
 So, I create a lot of callback functions. A lot of them are just anonymous wrappers around other functions, which seems really busy and really silly sometimes.
 
