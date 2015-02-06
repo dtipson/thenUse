@@ -4,21 +4,21 @@ Define methods, or chains of methods, partially apply some of their arguments, a
 
 ---
 
-use(method /* args... any number of method args*/) -> returns an object with the following methods:
+**use(method /* args...*/)** -> returns an object with the following methods:
 
-.on(context)/.the(context) -> specify context (say, a jQuery collection) and return the function
+**.on(context)/.the(context)** -> specify context (say, a jQuery collection) and return the function
 
-.thenUse(method /* args...*/) -> chain on another method (same args as use, same result)
+**.thenUse(method /* args...*/)** -> chain on another method (same args as use, same result)
 
-.$ -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), apply it to the method chain, AND run it
+**.$** -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), apply it to the method chain, AND run it
 
-.take(integer) -> after each use, .take specifies how many extra arguments the final function can accept, applying them in order
+**.take(integer)** -> after each use, .take specifies how many extra arguments the final function can accept, applying them in order
 
 ---
 
 You can also do things the other way around:
 
-$().use -> a jQuery plugin that binds the "used" methods to the jQuery collection and then returns the resulting function
+**$().use(method /*args...*/)** -> a jQuery plugin that binds the "used" methods to the jQuery collection and then returns the resulting function
 
 
 Once we have something that has both methods and a context that matches those methods (i.e. the method "remove" is defined on the context $('.thing')) use() returns a function.  That function, however, also has the above methods, so you don't just have to call it, you can continue to define further functions using it
