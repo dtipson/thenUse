@@ -26,7 +26,7 @@ var dimTheBody = dim.the($('body'));// alternate syntax, same result
 var dimThenSlim = dim.thenUse('delay',5000).thenUse('slideUp');
 ```
 
-**.$** -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), apply it to the method chain, AND run it
+**.$** -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), and run it through the method chain
 
 ```
 $('ul').on('click','li', dim.$ );
@@ -127,7 +127,7 @@ But what if we could partially apply some method arguments, but decide to take o
 var toggleClass = use('toggleClass').take(1);
 ```
 
-toggleClass... what? Well can decide that later:
+toggle what class? On what? Well, we can just decide all that later:
 
 ```
 $('ul').on('click','li', toggleClass('foo').$ );
@@ -138,7 +138,7 @@ toggleClass('zim').on($('body'));
 
 ```
 
-Or say we have a dfd chain that returns a string, now we can use that function to decide what to apply it to:
+Or say we have a dfd chain that returns a string, now instead of creating an anonymous function with an argument "string" or something, we can just use that argument-ingesting toggleClass function to decide what to apply it to:
 
 ```
 var $thing = $('.thing');
@@ -147,7 +147,7 @@ someApi('that-returns-a-string').done( toggleClass.on($thing) );
 someApi('that-returns-a-string').done( $thing.use(toggleClass) );//same
 ```
 
-Right?  We already have some api that returns a string argument, we already have a function that takes a string argument, so why do we need to re-say all that stuff?  Just hook them together.  Tell it what to do to what.
+Right?  We already have some api that returns a string argument, we already have a function that takes a string argument, so why do we need to re-say all that function(string){ doStuffWithString(string); } string stuff?  Just glue the already defined and matching functions together.  The only new information anything here really needed defined for it was what to do it to.
 
 Also, what if we want to define the usage of a bunch of chained jQuery methods and maybe even define which arguments get passed into them later on? Ok.
 
@@ -157,7 +157,7 @@ var toggleClosest = use('closest').take(1).thenUse('toggleClass').take(1);
 $('td').on('click','li', toggleClosest('table','baz').$ );
 ```
 
-Or even do lots of stuff all mashed up:
+Or you can even do lots of stuff, all mashed up and give it a stupid-long name that's also descriptive and will minifiy down to single character anyhow:
 
 ```
 var red = use('toggleClass','red'),
@@ -178,11 +178,21 @@ var red = use('toggleClass','red'),
     redthenFadeThenUnred = red.thenUse('delay',2000)
         .thenUse('fadeTo',3000, 0.4, red.$ );
 
-$('header').use(redthenFadeThenUnred)();//extra parentheses = actually run the function now
+/*
+redthenFadeThenUnred is now a thing that
+will return a function when you tell it what you're doing it all to
+*/
+
+var redtheHeaderthenFadeitThenUnred = $('header').use(redthenFadeThenUnred);
+redtheHeaderthenFadeitThenUnred();
+
+//or
+
+$('header').use(redthenFadeThenUnred)();// define and run all at once
 
 ```
 
-I mean, you could just define functions for all of this stuff too, though they won't be as "composable."  It's nice sometimes to just define some behavior that you want TO have happen, rather than having it happen right away.
+I mean, you could just define named functions for all of this stuff too. They won't be as "composable," necessarily, but they could still be the right way to do things.  It's just nice sometimes to just quickly define some behavior that you want TO have happen, rather than having it happen right away, and the syntax is decently readable as long as it's relatively short.
 
 IDK, you do what you want.
 
