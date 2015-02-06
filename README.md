@@ -21,7 +21,7 @@ var dimTheBody = dim.the($('body'));// alternate syntax, same result
 
 ```
 
-**.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result)
+**.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result, but now has multiple method/arg pairs in the stack)
 
 ```
 var dimThenSlim = dim.thenUse('delay',5000).thenUse('slideUp');
@@ -41,11 +41,14 @@ var toggleClass = use('toggleClass').take(2);
 $('ul').on('click','li', toggleClass('clicked',true).$ );
 ```
 
----
-
 You can also do things the other way around:
 
 **$().use(method /*args...*/)** -> a jQuery plugin that binds the "used" methods to the jQuery collection and then returns the resulting function
+
+```
+$('body').use('css',{opacity:0.3});
+$('body').use(dim);//also accepts an already defined stack of methods
+```
 
 
 Once we have something that has both methods and a context that matches those methods (i.e. the method "remove" is defined on the context $('.thing')) use() returns a function.  That function, however, also has the above methods, so you don't just have to call it, you can continue to define further functions using it
