@@ -135,7 +135,6 @@ $('ol').on('click','li', toggleClass('bar').$ );
 $('td').on('click','li', toggleClass('baz').$ );
 
 toggleClass('zim').on($('body'));
-
 ```
 
 Or say we have a dfd chain that returns a string, now instead of creating an anonymous function with an argument "string" or something, we can just use that argument-ingesting toggleClass function to decide what to apply it to:
@@ -179,8 +178,8 @@ var red = use('toggleClass','red'),
         .thenUse('fadeTo',3000, 0.4, red.$ );
 
 /*
-redthenFadeThenUnred is now a thing that
-will return a function when you tell it what you're doing it all to
+redthenFadeThenUnred is now a thing that will
+return a function whenever you tell it what you want to do all that to
 */
 
 var redtheHeaderthenFadeitThenUnred = $('header').use(redthenFadeThenUnred);
