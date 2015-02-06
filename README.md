@@ -176,19 +176,17 @@ Or expressed/used in a slightly different way...
 var red = use('toggleClass','red'),
     redthenFadeThenUnred = red.thenUse('delay',2000)
         .thenUse('fadeTo',3000, 0.4, red.$ );
+```
 
-/*
-redthenFadeThenUnred is now a thing that will
-return a function whenever you tell it what you want to do all that to
-*/
+"redthenFadeThenUnred" is now a thing that will return a function whenever you tell it what you want to do all that to. e.g.
 
+```
 var redtheHeaderthenFadeitThenUnred = $('header').use(redthenFadeThenUnred);
 redtheHeaderthenFadeitThenUnred();
 
 //or
 
 $('header').use(redthenFadeThenUnred)();// define and run all at once
-
 ```
 
 I mean, you could just define named functions for all of this stuff too. They won't be as "composable," necessarily, but they could still be the right way to do things.  It's just nice sometimes to just quickly define some behavior that you want TO have happen, rather than having it happen right away, and the syntax is decently readable as long as it's relatively short.
