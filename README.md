@@ -9,7 +9,7 @@ Define methods, or chains of methods, partially apply some of their arguments, a
 ```
 var dim = use('css',{opacity:0.3});
 
-//"dim" represents the method/arguments and exposes has the following methods:
+//"dim" now represents the method/arguments and exposes has the following methods:
 ```
 
 
@@ -50,9 +50,9 @@ $('body').use(dim);// also accepts an already defined stack of methods
 ```
 
 
-Once we have something that has both methods and a context that matches those methods (i.e. the method "remove" is defined on the context $('.thing')) use() returns a function.
+Once we have something that has both some methods and a context that matches those methods (i.e. the method "remove" is defined on the context $('.thing')), use() starts returning a function.
 
-**NOTE:** That function _also_ has the above methods, meaing that you can continue to define further functions by chaining on additional behavior.
+That function, however, _also_ has the above methods, meaing that you can either call it _or_ continue to define further functions by chaining on additional behavior.
 
 
 -----
