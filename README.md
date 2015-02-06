@@ -191,5 +191,5 @@ $('header').use(redthenFadeThenUnred)();// define and run all at once
 
 I mean, you could just define named functions for all of this stuff too. They won't be as "composable," necessarily, but they could still be the right way to do things.  It's just nice sometimes to just quickly define some behavior that you want TO have happen, rather than having it happen right away, and the syntax is decently readable as long as it's relatively short.
 
-IDK, you do what you want.
+IDK, you do what you want.  It's 1.3KB, though it could probably be made smaller.
 
