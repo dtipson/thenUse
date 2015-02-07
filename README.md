@@ -1,32 +1,37 @@
 # thenUse
 
-Define methods, or chains of methods, partially apply some of their arguments, apply a context later on, get back a function that will do what you wanted later rather than doing it now.  Perfect one-line simple callbacks or compose complex chains.
+Define (jQuery) methods, or chains of (jQuery) methods, partially apply some of their arguments, apply a context later on, get back a function that will do what you wanted later rather than doing it now.  Perfect for one-lining simple callbacks or composing complex chains of behavior without getting overly specific too soon.
 
 ---
 
-**use(method /* args...*/)** -> stores the method/arguments, exposes ways to turn them into functions
+**use(method /* args...*/)** -> stores the method/arguments, exposes several ways to either turn them into functions, add arguments, or chain on more methods
 
 ```
 var dim = use('css',{opacity:0.3});
 
-//"dim" now represents the method/arguments and exposes has the following methods:
+//"dim" now represents the method/arguments and exposes the following methods:
 ```
 
 
-**.on(context)/.the(context)** -> specify a context (say, a jQuery collection) and return a _function_ that, when run, will use the stored methods on it
+**.on(context)/.the(context)** -> specify a context (say, a jQuery collection) and return a _function_ that, when run, will use all the stored methods on it
 
 ```
-var dimTheBody = use('css',{opacity:0.3}).on($('body'));
+var dim = use('css',{opacity:0.3});
+
+var dimTheBody = use('css',{opacity:0.3}).on($('body'));// returns a function
 var dimTheBody = dim.the($('body'));// alternate syntax, same result
+
+var dimTheBody = $('body').use('css',{opacity:0.3});// alternate syntax, same result
+var dimTheBody = $('body').use(dim);// alternate syntax, same result
 ```
 
-**.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result, but now has multiple method/arg pairs in the stack). You can also pass in an already created "use" and thenUse will simply steal its method stack and append it
+**.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result, but now has multiple method/arg pairs in the stack). You can also pass in an already created "use" and thenUse will simply copy over and append its entire method stack
 
 ```
 var dim = use('css',{opacity:0.3}),
     dimAndSlim = use('delay',1000).thenUse(dim).thenUse('slideUp',2000);
 
-dimAndSlim.the($('header'))();// define a function & invoke it right away
+dimAndSlim.the($('header'))();// define that function & invoke it right away
 //or
 $('header').use(dimAndSlim)();// same
 

@@ -3,7 +3,7 @@ var $body = $('body'),//let's have this $el cached to avoid retyping
     $ul = $('ul'),//let's have this $el cached to avoid retyping
     $table = $('table'),//let's have this $el cached to avoid retyping
 
-/*
+
     toggleHi = use('toggleClass','hi'),//returns a function that will runs toggleClass 'hi' on whatever it's applied to
     toggleBody = toggleHi.the($('body')),//returns a function that will toggle the class 'hi' on the body
     toggleBody2 = $('body').use(toggleHi),//returns a function using the jQuery plugin that runs toggleHi on the body, expressed differently
@@ -17,7 +17,7 @@ var $body = $('body'),//let's have this $el cached to avoid retyping
     fadeIn = use('fadeIn',4000),
     fadeOutfadeIn = use('fadeOut',4000,fadeIn.$run),
     dimHeaderthenFadeThenDimBody = dimtheHeader.thenUse('delay',5000).thenUse('fadeOut',3000,dim.the($('body'))),// and we can even chain a bunch of things logically, including using a USE as a callback inside the callback definition of another method
-*/
+
 
     toggleOn = use('toggleClass','on'),
     toggletheClosest = use('closest').take(1).thenUse(toggleOn);
