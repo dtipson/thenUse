@@ -26,9 +26,9 @@ var dimTheBody = dim.the($('body'));// alternate syntax, same result
 var dim = use('css',{opacity:0.3}),
     dimAndSlim = use('delay',1000).thenUse(dim).thenUse('slideUp',2000);
 
-dimAndSlim.the($('header'))();//defining the function & invoking it right away
+dimAndSlim.the($('header'))();// define a function & invoke it right away
 //or
-$('header').use(dimAndSlim)();
+$('header').use(dimAndSlim)();// same
 
 ```
 
@@ -58,7 +58,7 @@ $('body').use(dim);// also accepts an already defined stack of methods
 
 Once we have something that has both some methods and a context that matches those methods (i.e. the method "remove" is defined on the context $('.thing')), use() starts returning a function.
 
-That function, however, _also_ has the above methods, meaing that you can either call it _or_ continue to define further functions by chaining on additional behavior.
+That function, however, _also_ has the above methods, meaning that you can either call it _or_ continue to define further functions by chaining on additional behavior.
 
 
 -----
@@ -143,7 +143,7 @@ $('td').on('click','li', toggleClass('baz').$ );
 toggleClass('zim').on($('body'));
 ```
 
-Or say we have a dfd chain that returns a string, now instead of creating an anonymous function with an argument "string" or something, we can just use that argument-ingesting toggleClass function to decide what to apply it to:
+Or say we have a $.Deferred/Promise chain that we know returns a string: now instead of creating an anonymous function with an argument "string" or something, we can just use that argument-ingesting toggleClass function to decide what to apply it to:
 
 ```
 var $thing = $('.thing');
@@ -152,9 +152,9 @@ someApi('that-returns-a-string').done( toggleClass.on($thing) );
 someApi('that-returns-a-string').done( $thing.use(toggleClass) );//same
 ```
 
-Right?  We already have some api that returns a string argument, we already have a function that takes a string argument, so why do we need to re-say all that function(string){ doStuffWithString(string); } string stuff?  Just glue the already defined and matching functions together.  The only new information anything here really needed defined for it was what to do it to.
+Right?  We already have some api that returns a string as the first argument, we already have a function that takes a string as its first argument, so why do we need to re-say all that function(string){ doStuffWithString(string); } string stuff?  Just glue the already defined and matching functions together.  The only new information anything here really needed defined for it was what to do what to.
 
-Also, what if we want to define the usage of a bunch of chained jQuery methods and maybe even define which arguments get passed into them later on? Ok.
+Now, what if we want to define the usage of a bunch of chained jQuery methods and maybe even define which arguments all get passed into them later on? Ok.
 
 ```
 var toggleClosest = use('closest').take(1).thenUse('toggleClass').take(1);
@@ -162,7 +162,7 @@ var toggleClosest = use('closest').take(1).thenUse('toggleClass').take(1);
 $('td').on('click','li', toggleClosest('table','baz').$ );
 ```
 
-Or you can even do lots of stuff, all mashed up and give it a stupid-long name that's also descriptive and will minifiy down to single character anyhow:
+Or you can even do lots of stuff, all mashed up and give it a stupid-long name that's also very descriptive and will minifiy down to single character anyhow:
 
 ```
 var red = use('toggleClass','red'),
@@ -195,7 +195,7 @@ redtheHeaderthenFadeitThenUnred();
 $('header').use(redthenFadeThenUnred)();// define and run all at once
 ```
 
-I mean, you could just define named functions for all of this stuff too. They won't be as "composable," necessarily, but they could still be the right way to do things.  It's just nice sometimes to just quickly define some behavior that you want TO have happen, rather than having it happen right away, and the syntax is decently readable as long as it's relatively short.
+I mean, you could just define named functions for all of this stuff too. They won't be as "composable" necessarily, but they could still be the right way to do things.  It's just nice sometimes to just quickly define some behavior that you want TO have happen, rather than having it happen right away, and the syntax is decently readable as long as it's relatively short.
 
-IDK, you do what you want.  It's 1.1KB, though it could probably be made smaller by a competant golfer.
+IDK, you do what you want.  It's 1.1KB, though it could probably be made smaller by a competent golfer.
 
