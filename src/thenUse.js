@@ -3,20 +3,22 @@
     var arslice = Function.prototype.call.bind( Array.prototype.slice );
     /*define the function */
     function use(method /*args*/){
-        return use.fn.init.apply({},[arslice(arguments)]);
+        return method && method.s && method.s[0]?
+            method://guard against weird thing of passing a use into a use
+            use.fn.init.apply({},[arslice(arguments)]);
     }
 
     /*define the underlying prototype*/
     use.fn = use.prototype = {
         init: function(inits,olds){
             var user = function(){
-                var context = user.ctx,
+                var context = user.c,
                     sln = user.s.length,
                     args = arguments;
                     //we need a way to specify that we can take an arg
 
-                if($.isFunction(user.ctx)){
-                    context = user.ctx();
+                if($.isFunction(user.c)){
+                    context = user.c();
                 }
                 $.each(user.s,function(i,op){
                     context = context[op[0]].apply(//using the method
@@ -33,15 +35,15 @@
                 return context;
             };
 
-            function setContext(ctx){
-                return use.fn.init.call(ctx||$(this),undefined,user.s);
+            function setContext(c){
+                return use.fn.init.call(c||$(this),undefined,user.s);
             }
 
-            /*this is awful, probably a better way to do all this, but what we need to do is go through the s, see if any methods accept additional args, add those args, and reduce the number we're still waiting on*/
+            /*this is awful, probably a better way to do all this, but what we need to do is go through the s, see if any methods accept additional args, add those args, and reduce the number we're still waiting on and return a _new_ function*/
             function takeArgs(){
                 var args = arslice(arguments),//args as an array
                     pointer = 0,
-                    news = user.s.slice(0);
+                    news = $.extend(true,[],user.s);//true copy
                 $.each(news,function(i){//have to use each because jQuery.map flattens arrays, arg!
                     if(news[i][2] && news[i][2]>0){
                         var newargs = args.slice(pointer,news[i][2]);
@@ -50,16 +52,22 @@
                         pointer = pointer+news[i][2];
                     }
                 });
-                return use.fn.init.apply(user.ctx,[undefined,news]);//this is not creating a new context correctly
+                return use.fn.init.apply(user.c,[undefined,news]);//still overwriting things somehow
             }
 
             $.extend(user,{
                 s : olds||[[inits[0],inits.slice(1)]],
-                ctx : this,
+                c : this,
                 thenUse: function(method){
                     var args = arslice(arguments);//args as an array
-                    return use.fn.init.call(user.ctx,undefined,
-                        user.s.concat([[method,args.slice(1)||[]]])
+                    return use.fn.init.call(
+                        user.c,//retain old context if any
+                        undefined,//adding not initing
+                        user.s.concat(
+                            method && method.s && method.s[0]?
+                                method.s://add a stack from existing "use"
+                                [[method,args.slice(1)||[]]]//or add new methods
+                        )
                     );
                 },
                 take: function(num){
@@ -69,7 +77,7 @@
             });
 
             function returnUse(){
-                return (!$.isEmptyObject(user.ctx) && user.ctx[user.s[0][0]]) || $.isFunction(user.ctx)?
+                return (!$.isEmptyObject(user.c) && user.c[user.s[0][0]]) || $.isFunction(user.c)?
                         user://if we have a context, the function is ready to go
                         $.extend(takeArgs,{//if no context yet, let's return a function that takes just args and returns this user thingy
                             on: setContext,
@@ -80,7 +88,7 @@
                             thenUse: user.thenUse,
                             take: user.take,
                             s: user.s,
-                            ctx: user.ctx
+                            c: user.c
                         });
             }
             return returnUse();
@@ -90,7 +98,7 @@
     /*define as a jQuery plugin bound to */
     $.fn.use = function(method /*args*/){
         if(method && method.s && method.s[0]){
-            return use.fn.init.apply(this,[undefined,method.s]);//steal the s from some other method & apply it to a new context!
+            return use.fn.init.apply(this,[undefined,method.s]);//steal the stack from some other method & apply it to a new context!
         }else{
             return use.fn.init.apply(this,[arslice(arguments)]);
         }

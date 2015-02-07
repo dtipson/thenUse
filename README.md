@@ -20,10 +20,16 @@ var dimTheBody = use('css',{opacity:0.3}).on($('body'));
 var dimTheBody = dim.the($('body'));// alternate syntax, same result
 ```
 
-**.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result, but now has multiple method/arg pairs in the stack)
+**.thenUse(method /* args...*/)** -> chain on another method (same arguments as use, returns the same result, but now has multiple method/arg pairs in the stack). You can also pass in an already created "use" and thenUse will simply steal its method stack and append it
 
 ```
-var dimThenSlim = dim.thenUse('delay',5000).thenUse('slideUp');
+var dim = use('css',{opacity:0.3}),
+    dimAndSlim = use('delay',1000).thenUse(dim).thenUse('slideUp',2000);
+
+dimAndSlim.the($('header'))();//defining the function & invoking it right away
+//or
+$('header').use(dimAndSlim)();
+
 ```
 
 **.$** -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), and run it through the method chain
