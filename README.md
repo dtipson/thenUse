@@ -124,7 +124,7 @@ $.Deferred().resolveWith($('header')).done($.fn.toggle);
 
 Which also works, but is still sort of ridiculous.  You don't want to have to mess with the context of the entire Deferred just for doing something like that.
 
-Another example: why doesn't this work:
+Another example: why doesn't this work?
 
 ```
 $('li').on('click', $(this).remove );
