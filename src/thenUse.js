@@ -82,8 +82,18 @@
                         $.extend(takeArgs,{//if no context yet, let's return a function that takes just args and returns this user thingy
                             on: setContext,
                             the: setContext,//same as on just works better in some sentences
-                            $: function(){
-                                return setContext.apply(this)();//when called take our context from the context, guarding against additional arguments, and run the function with that context
+                            $: function(/**/){
+                                var funcs = arslice(arguments);
+                                return !funcs.length || !$.isFunction(funcs[0])?//e or any context vs. funclist
+                                    setContext.apply(this)()://when called take our context from the calling context, guarding against additional arguments, and run the function with that context
+                                    function(/*e*/){
+                                        var args2 = arslice(arguments),
+                                            self = this;
+                                        $.each(funcs,function(i,func){
+                                            return $.isFunction(func) && func.apply(self,args2);
+                                        });
+                                        return setContext.apply(this)();
+                                    };
                             },
                             thenUse: user.thenUse,
                             take: user.take,

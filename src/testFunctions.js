@@ -1,6 +1,6 @@
 var $body = $('body'),//let's have this $el cached to avoid retyping
     $header = $('header'),//let's have this $el cached to avoid retyping
-    $ul = $('ul'),//let's have this $el cached to avoid retyping
+    $ol = $('ol'),//let's have this $el cached to avoid retyping
     $table = $('table'),//let's have this $el cached to avoid retyping
 
 
@@ -18,6 +18,6 @@ var $body = $('body'),//let's have this $el cached to avoid retyping
     fadeOutfadeIn = use('fadeOut',4000,fadeIn.$run),
     dimHeaderthenFadeThenDimBody = dimtheHeader.thenUse('delay',5000).thenUse('fadeOut',3000,dim.the($('body'))),// and we can even chain a bunch of things logically, including using a USE as a callback inside the callback definition of another method
 
-
+    getClosest = use('closest').take(1),
     toggleOn = use('toggleClass','on'),
     toggletheClosest = use('closest').take(1).thenUse(toggleOn);

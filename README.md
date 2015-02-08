@@ -37,10 +37,23 @@ $('header').use(dimAndSlim)();// same
 
 ```
 
-**.$** -> (no parentheses! ) ingest the context of "this" at runtime, and wrap it in $(), and run it through the method chain
+**.$** -> ingest the context of "this" at runtime, and wrap it in $(), and run it through the method chain.
 
 ```
 $('ul').on('click','li', dim.$ );
+```
+
+Normally, .$ is used without invoking it directly, but if you do call it with functions as arguments, then it will return a function that will, in addition to executing usual method stack, also execute those functions (with the usual context and arguments, such as the jQuery event object).  This allows you to attach multiple named or anonymous functions to an event handler instead of just one.
+
+```
+function stopevent(e){
+    return e && e.preventDefault && e.preventDefault(); // stop an event
+}
+function log(){
+    console.log.apply(console, Array.prototype.slice.call(arguments, 0));
+}
+
+$('ul').on('click','li', dim.$(stopevent,log) );
 ```
 
 **.take(integer)** -> after each use, .take specifies how many extra arguments the final function can accept, applying them in order
