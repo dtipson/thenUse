@@ -43,7 +43,7 @@ $('header').use(dimAndSlim)();// same
 $('ul').on('click','li', dim.$ );
 ```
 
-Normally, .$ is used without invoking it directly, but if you do call it with functions as arguments, then it will return a function that will, in addition to executing usual method stack, also execute those functions (with the usual context and arguments, such as the jQuery event object).  This allows you to attach multiple named or anonymous functions to an event handler instead of just one.
+Normally, .$ is used without invoking it directly, but if you do call it with functions as arguments, then it will return a function that will, in addition to executing usual method stack, also execute those functions (with the usual context and arguments, such as the jQuery event object).  This allows you to attach multiple already named or anonymous functions to an event handler instead of just one.
 
 ```
 function stopevent(e){
@@ -54,6 +54,10 @@ function log(){
 }
 
 $('ul').on('click','li', dim.$(stopevent,log) );
+
+$('table').on('click','td', use().$(stopevent,log, function(event){
+    log(event.isDefaultPrevented());//returns true, as stopevent did it
+}) );
 ```
 
 **.take(integer)** -> after each use, .take specifies how many extra arguments the final function can accept, applying them in order
@@ -66,7 +70,7 @@ $('ul').on('click','li', toggleClass('clicked',true).$ );
 
 You can also do things the other way around:
 
-**$().use(method /*args...*/)** -> a jQuery plugin that binds the "used" methods to the jQuery collection and then returns the resulting function
+**$().use(method /*args...*/)** -> also noted above, but there's also a simple jQuery plugin that binds "used" methods to an existing jQuery collection and returns the resulting function
 
 ```
 $('body').use('css',{opacity:0.3}); //returns a function that does this
