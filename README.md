@@ -96,10 +96,59 @@ someApi().done(function(){
 And you know, .remove() is just a function, it doesn't even take any arguments.  And .done() is a thing that fires functions you put into it. So why can't I just do something like:
 
 ```
-someApi().done( $('thing').remove );
+$('li').on('click', $(this).remove );
 ```
 
-Well, lots of reasons, lots of really interesting reasons. So I made a little jQuery plugin/library that gets as close as I could get to that:
+Well, lots of reasons, lots of really interesting reasons that'll make you feel stupid when you try them and think about what happened. Let's think through some of those
+
+```
+$.Deferred().resolve().done( $('.thing').toggle );
+```
+You get "undefined is not a function." Well, of course.  jQuery DOM methods like .toggle run their function over the value of "this." $.Deferred handlers like .done() bind the value of "this" to the Deferred itself by default, overriding the context set by $('.thing').  So, that means that this would actually work:
+
+```
+$.Deferred().resolveWith($('header')).done( $('header').toggle );
+```
+
+But of course, so would this:
+
+```
+$.Deferred().resolveWith($('header')).done($('TheInfiniteAbyss').toggle);
+```
+
+The second selector there is irrelevant, because what you're really doing is this:
+
+```
+$.Deferred().resolveWith($('header')).done($.fn.toggle);
+```
+
+Which also works, but is still sort of ridiculous.  You don't want to have to mess with the context of the entire Deferred just for doing something like that.
+
+Another example: why doesn't this work:
+
+```
+$('li').on('click', $(this).remove );
+```
+
+Here, when you click, either nothing happens or else you get a terrifying error.
+
+So many things wrong here. Since $() is really just a function it's running right away there, when you _define_ the click event rather than when it's executing it, and worse: it's defined in the outer context. So "this" here is going to refer to the window, which is wrong straight away. So maybe we could try this?
+
+```
+$('li').on('click', $.fn.remove );
+```
+
+Nope: jQuery events bind "this" to the _native_ DOM element, not the wrapped jQuery one.  And $.fn.remove is a jQuery method that works on jQuery elements: it doesn't work on native DOM elements (try it: $.fn.remove($('body').get(0)) does nothing). But even if it did, you'd _still_ be out of luck because .remove() actually takes a selector argument (even if it's rarely used) to filter what's being removed. See the problem? jQuery event handlers fire their callbacks with at least one argument: the event object.  So you'd be passing THAT into .remove(), which, interpreted as a selector, is nonsense.
+
+Here's something similar that will, at least, generate a nice, nasty error:
+
+```
+$('li').on('click', $.fn.hide );
+```
+
+Here, you get "Uncaught TypeError: Failed to execute 'animate' on 'Element': Valid arities are: [1], but 4 arguments provided."
+
+Same set of problems: garbage in, garbage out. So yeah, none of that works.  To make something LIKE it work instead, I made a little jQuery plugin/library that gets as close as I could get:
 
 ```
 someApi().done(
@@ -117,23 +166,23 @@ var remove = use('remove');
 someApi().done(
     remove.the($thing)
 ).fail(
-    remove.the($otherThing)
+    $otherThing.use(remove);
 );
 ```
 
-So, that can be nice sometimes. A bit easier to read, minifies a tiny bit better, whatever.  Same thing with this:
+So, that syntax can be nice sometimes instead of all those anonymous functions. It's a bit easier to read, it minifies a tiny bit better, whatever.  Same deal with this:
 
 ```
 $('ul').on('click','li', function(){ $(this).remove(); });
 ```
 
-Another anonymous function. And why am I explicitly specifying $(this) for something so simple? What's with all the () () ()? It looks like a really lousy emjoi. So, now I can do this instead:
+Another anonymous function. And why are we explicitly specifying $(this) for something so simple? What's with all the () () ()? It looks like a really goofy emjoi. With thenUse, we can do this instead:
 
 ```
 $('ul').on('click','li', use('remove').$ );
 ```
 
-or
+or something like this:
 
 ```
 var removeSelf = use('remove').$;
@@ -141,9 +190,9 @@ var removeSelf = use('remove').$;
 $('ul').on('click','li', removeSelf );
 ```
 
-Mildly interesting.  Instead of doing something, use is returning a function, or at least something that can become a function once it has a calling context.
+Mildly interesting.  There are other ways of doing that, if you're going to bother to create a named function anyhow.  But this is nice too.  Instead of doing something right away, use is returning a function, or at least something that can _become_ a function once it has a calling context.
 
-When used with jQuery, it's basically like, backwards.  You can define the methods before you decide what apply it to. use('fadeOut').on($('body')) Well, sometimes. You can also do $('body').use('remove').  The real difference is just that in these cases, instead of doing something, it's returning a function that _WILL_ do it when it's called.
+When used with jQuery, it's sometimes a bit like the jQuery syntax backwards.  You can define the methods before you decide what apply it to. use('fadeOut').on($('body')) You can also do $('body').use('remove').  The real difference is just that in these cases, instead of doing something, it's returning a function that _WILL_ do it when it's called.
 
 But what if we could partially apply some method arguments, but decide to take others at runtime?
 
