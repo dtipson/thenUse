@@ -99,7 +99,7 @@ And you know, .remove() is just a function, it doesn't even take any arguments. 
 $('li').on('click', $(this).remove );
 ```
 
-Well, lots of reasons, lots of really interesting reasons that'll make you feel stupid when you try them and think about what happened. Let's think through some of those
+Well, lots of reasons, lots of really interesting reasons that'll make you feel stupid when you try them and think about what happened. Let's think through some of those.
 
 ```
 $.Deferred().resolve().done( $('.thing').toggle );
