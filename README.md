@@ -1,6 +1,6 @@
 # thenUse
 
-Define (jQuery) methods, or chains of (jQuery) methods, partially apply some of their arguments, apply a context later on, get back a function that will do what you wanted later rather than doing it now.  Perfect for one-lining simple callbacks or composing complex chains of behavior without getting overly specific too soon.
+Define (jQuery) methods, or chains of (jQuery) methods, partially apply some of their arguments, apply a context later on, get back a function that _will_ do what you want later rather than doing it now.  One-line simple callbacks or compose complex chains of behavior without getting overly specific too soon.
 
 ---
 
@@ -43,7 +43,7 @@ $('header').use(dimAndSlim)();// same
 $('ul').on('click','li', dim.$ );
 ```
 
-Normally, .$ is used without invoking it directly, but if you do call it with functions as arguments, then it will return a function that will, in addition to executing usual method stack, also execute those functions (with the usual context and arguments, such as the jQuery event object).  This allows you to attach multiple already named or anonymous functions to an event handler instead of just one.
+Normally, .$ is used without invoking it directly, but if you do call it with functions as arguments, then it will return a function that will, in addition to executing usual method stack, also execute those functions (with the usual context and arguments, such as the jQuery event object).  This allows you to attach multiple already named or anonymous functions to an event handler instead of just the usual one.
 
 ```
 function stopevent(e){
@@ -60,7 +60,7 @@ $('table').on('click','td', use().$(stopevent,log, function(event){
 }) );
 ```
 
-**.take(integer)** -> after each use, .take specifies how many extra arguments the final function can accept, applying them in order
+**.take(integer)** -> after each use, .take specifies how many extra runtime arguments the final function can accept, applying them in order
 
 ```
 var toggleClass = use('toggleClass').take(2);
@@ -120,7 +120,7 @@ But of course, so would this:
 $.Deferred().resolveWith($('header')).done($('TheInfiniteAbyss').toggle);
 ```
 
-The second selector there is irrelevant, because what you're really doing is this:
+The second selector there is irrelevant, because what you're _really_ doing there is this:
 
 ```
 $.Deferred().resolveWith($('header')).done($.fn.toggle);
@@ -174,19 +174,19 @@ someApi().done(
 );
 ```
 
-So, that syntax can be nice sometimes instead of all those anonymous functions. It's a bit easier to read, it minifies a tiny bit better, whatever.  Same deal with this:
+So, that syntax can be nice sometimes instead of all those anonymous functions. It's a bit easier to read, imho, it minifies a tiny bit better, whatever.  Same deal with this:
 
 ```
 $('ul').on('click','li', function(){ $(this).remove(); });
 ```
 
-Another anonymous function. And why are we explicitly specifying $(this) for something so simple? What's with all the () () ()? It looks like a really goofy emjoi. With thenUse, we can do this instead:
+Another anonymous function. And why are we explicitly specifying $(this) for something so simple? What's with all the () () ()? It looks like a really goofy emoji. With thenUse, we can just do this instead:
 
 ```
 $('ul').on('click','li', use('remove').$ );
 ```
 
-or something like this:
+or even something like this:
 
 ```
 var removeSelf = use('remove').$;
@@ -266,7 +266,7 @@ redtheHeaderthenFadeitThenUnred();
 $('header').use(redthenFadeThenUnred)();// define and run all at once
 ```
 
-I mean, you could just define named functions for all of this stuff too. They won't be as "composable" necessarily, but they could still be the right way to do things.  It's just nice sometimes to just quickly define some behavior that you want TO have happen, rather than having it happen right away, and the syntax is decently readable as long as it's relatively short.
+I mean, you could just define named functions for all of this stuff too. They won't be as "composable" necessarily unless you go out of your way to make them so (which is sort of exactly what I already did to get to this point), but they could still be the right way to do things.  It's just nice sometimes to just quickly define some behavior that you want TO have happen, rather than having it happen right away, and the syntax is decently readable as long as it's relatively short.
 
 IDK, you do what you want.  It's 1.1KB, though it could probably be made smaller by a competent golfer.
 

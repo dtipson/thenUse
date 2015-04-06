@@ -39,12 +39,12 @@
                 return use.fn.init.call(c||$(this),undefined,user.s);
             }
 
-            /*this is awful, probably a better way to do all this, but what we need to do is go through the s, see if any methods accept additional args, add those args, and reduce the number we're still waiting on and return a _new_ function*/
+            /*this is awful, probably a better way to do all this, but what we need to do is go through the stack, see if any methods still accept any additional args, add those args, and reduce the number we're still waiting on and return a _new_ function*/
             function takeArgs(){
                 var args = arslice(arguments),//args as an array
                     pointer = 0,
                     news = $.extend(true,[],user.s);//true copy
-                $.each(news,function(i){//have to use each because jQuery.map flattens arrays, arg!
+                $.each(news,function(i){//have to use each because jQuery's.map flattens arrays, arg!
                     if(news[i][2] && news[i][2]>0){
                         var newargs = args.slice(pointer,news[i][2]);
                         news[i][1] = news[i][1].concat(newargs); //plus any additional arguments we said this could take, if any
@@ -90,6 +90,7 @@
                                         var args2 = arslice(arguments),
                                             self = this;
                                         $.each(funcs,function(i,func){
+                                            //call any functions passed to .$ with the event arguments
                                             return $.isFunction(func) && func.apply(self,args2);
                                         });
                                         return setContext.apply(this)();
